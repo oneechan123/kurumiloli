@@ -1,7 +1,5 @@
 let fs = require('fs')
-global.owner = ['628998512588','628112958665','6283175998566','6285693602003'] // Letakan nomor kamu disini
-global.mods = [] // Moderator?
-global.prems = JSON.parse(fs.readFileSync('./src/premium.json')) // Pengguna premium tidak memerlukan limit
+global.owner = ['6285693602003'] // Letakan nomor kamu disini
 global.APIs = { // API Prefix
   // nama: 'https://website'
   hardianto: 'https://hardianto-chan.herokuapp.com',
@@ -16,33 +14,37 @@ global.APIs = { // API Prefix
   vhtear: 'https://api.vhtear.com',
   lolhum: 'https://api.lolhuman.xyz',
   fxc7: 'https://fxc7-api.herokuapp.com',
-  aqul: 'https://api.justaqul.xyz'
+  bx: 'https://bx-hunter.herokuapp.com',
 
 }
 global.APIKeys = { // APIKey nya disini
   // 'https://website': 'apikey'
-  'https://hardianto-chan.herokuapp.com': 'apikey lu',
-  'https://neoxr-api.herokuapp.com': 'apikey lu',
+  'https://hardianto-chan.herokuapp.com': 'hardianto',
+  'https://neoxr-api.herokuapp.com': 'yntkts',
   'https://pencarikode.xyz': 'APIKEY',
-  'https://api.xteam.xyz': 'apikey lu',
-  'https://zahirr-web.herokuapp.com': 'apikey lu',
-  'https://api.zeks.xyz': 'apikey lu',
-  'https://api.lolhuman.xyz': 'apikey lu',
-  'https://api.vhtear.com': 'apikey lu',
-  'https://fxc7-api.herokuapp.com': 'apikey lu',
-  'https://api.justaqul.xyz': 'apikey lu'
+  'https://api.xteam.xyz': 'cffb066da6c4f0c9',
+  'https://zahirr-web.herokuapp.com': 'zahirgans',
+  'https://api.zeks.xyz': 'FVe0JFCdME58YSKmhoDWdRtyuJt',
+  'https://api.lolhuman.xyz': 'YoshinoKhoirul',
+  'https://api.vhtear.com': 'sayahafiz',
+  'https://fxc7-api.herokuapp.com': 'Fxc7',
+  'https://api.justaqul.xyz': '5kbUqdG00OXelFYx',
+  'http://zekais-api.herokuapp.com': 'grqgD6pU',
+  'https://bx-hunter.herokuapp.com': 'Ikyy69',
 }
 
 // Sticker WM
-global.packname = 'Kurumiloli'
-global.author = 'Rafli'
+global.packname = 'Yoshino'
+global.author = '+62856935963120'
 
 global.wait = '「 ⏱️ 」Harap tunggu...'
-global.eror = '*Server Error*'
-global.fla = 'https://www6.flamingtext.com/net-fu/proxy_form.cgi?&imageoutput=true&script=sketch-name&doScale=true&scaleWidth=800&scaleHeight=500&fontsize=100&fillTextType=1&backgroundColor=%23101820&fillTextPattern=Warning!&text='
-global.watermark = '® Kurumiloli'
+global.eror = '「❗」Server ERROR!'
+global.fla = 'https://www6.flamingtext.com/net-fu/proxy_form.cgi?&imageoutput=true&script=sketch-name&doScale=true&scaleWidth=800&scaleHeight=500&fontsize=100&fillTextType=1&fillTextPattern=Warning!&text='
+global.watermark = '© Yoshino\nKalo ada yg eror langsung #report ya supaya langsung dibenerin sama owner' //change the watermark 
+global.image = 'https://telegra.ph/file/8ff28bdf1ee84e756db24.jpg' //change the image
+global.thumbfoto = 'https://telegra.ph/file/3b2c7554ca0ed325d161b.jpg'
 
-global.multiplier = 69 // Semakin tinggi, semakin sulit naik level
+global.multiplier = 59 // Semakin tinggi, semakin sulit naik level
 
 let chalk = require('chalk')
 let file = require.resolve(__filename)
@@ -52,5 +54,3 @@ fs.watchFile(file, () => {
   delete require.cache[file]
   require(file)
 })
-
-// masukin apikey lu yang ada tulisan 'apikey lu' nya

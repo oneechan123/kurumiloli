@@ -8,6 +8,7 @@ const isNumber = x => typeof x === 'number' && !isNaN(x)
 const delay = ms => isNumber(ms) && new Promise(resolve => setTimeout(resolve, ms))
 module.exports = {
   async handler(chatUpdate) {
+    if (global.db.data == null) await global.loadDatabase()
     // console.log(chatUpdate)
     if (!chatUpdate.hasNewMessage) return
     if (!chatUpdate.messages && !chatUpdate.count) return
@@ -30,83 +31,91 @@ module.exports = {
         if (user) {
           if (!isNumber(user.exp)) user.exp = 0
           if (!isNumber(user.limit)) user.limit = 10
-          if (!isNumber(user.lastclaim)) user.lastclaim = 0
           if (!('registered' in user)) user.registered = false
+          if (!isNumber(user.lastclaim)) user.lastclaim = 0
           if (!user.registered) {
             if (!('name' in user)) user.name = this.getName(m.sender)
-            if (!isNumber(user.age)) user.age = -1
+            if (!isNumber(user.nim)) user.age = -1
             if (!isNumber(user.regTime)) user.regTime = -1
           }
           if (!isNumber(user.afk)) user.afk = -1
           if (!('afkReason' in user)) user.afkReason = ''
-          if (!('banned' in user)) user.banned = false
-          if (!isNumber(user.level)) user.level = 0
-          if (!isNumber(user.call)) user.call = 0
-          if (!user.role) user.role = 'Bronze'
           if (!('autolevelup' in user)) user.autolevelup = false
-          if (!isNumber(user.pc)) user.pc = 0
-          if (!isNumber(user.warning)) user.warning = 0
+          if (!('banned' in user)) user.banned = false
+          if (!('level' in user)) user.level = 0
+          if (!('premium' in user)) user.premium = false
+          if (!isNumber(user.premiumTime)) user.premiumTime = 0
+          if (!('role' in user)) user.role = ''
           if (!isNumber(user.joincount)) user.joincount = 0
-          if (!isNumber(user.primogem)) user.primogem = 0
-          if (!isNumber(user.mora)) user.mora = 0
-          if (!isNumber(user.cxp)) user.cxp = 0
-          if (!isNumber(user.axp)) user.axp = 0
+          if (!isNumber(user.call)) user.call = 0
+          if (!isNumber(user.pc)) user.pc = 0
+          if (!isNumber(user.reward)) user.reward = 0
+          if (!isNumber(user.warning)) user.warnimg = 0
+          if (!isNumber(user.dailyReward)) user.dailyReward = 0
         } else global.db.data.users[m.sender] = {
           exp: 0,
           limit: 10,
-          lastclaim: 0,
           registered: false,
+          lastclaim: 0, 
           name: this.getName(m.sender),
           age: -1,
           regTime: -1,
           afk: -1,
           afkReason: '',
+          autolevelup: false,
           banned: false,
           level: 0,
-          call: 0,
-          role: 'Bronze',
-          autolevelup: false,
-          pc: 0,
-          warning: 0,
+          premium: false,
+          premiumTime: 0,
+          role: '',
           joincount: 0,
-          primogem: 0,
-          mora: 0,
-          cxp: 0,
-          axp: 0,
+          call: 0,
+          pc: 0,
+          reward: 0,
+          dailyReward: 0, 
+          warning: 0,
         }
 
         let chat = global.db.data.chats[m.chat]
         if (typeof chat !== 'object') global.db.data.chats[m.chat] = {}
         if (chat) {
           if (!('isBanned' in chat)) chat.isBanned = false
-          if (!('welcome' in chat)) chat.welcome = false
-          if (!('detect' in chat)) chat.detect = false
+          if (!('welcome' in chat)) chat.welcome = true
+          if (!('detect' in chat)) chat.detect = true
           if (!('sWelcome' in chat)) chat.sWelcome = ''
           if (!('sBye' in chat)) chat.sBye = ''
           if (!('sPromote' in chat)) chat.sPromote = ''
           if (!('sDemote' in chat)) chat.sDemote = ''
-          if (!('descUpdate' in chat)) chat.descUpdate = true
-          if (!('stiker' in chat)) chat.stiker = false
-          if (!('delete' in chat)) chat.delete = true
           if (!('antiLink' in chat)) chat.antiLink = false
+          if (!('autoread' in chat)) chat.autoread = false
+          if (!('broadcast' in chat)) chat.broadcast = true
+          if (!('badword' in chat)) chat.badword = false
+          if (!('delete' in chat)) chat.delete = false
+          if (!('desc' in chat)) chat.desc = true
+          if (!('getmsg' in chat)) chat.getmsg = false
           if (!isNumber(chat.expired)) chat.expired = 0
-          if (!('antiBadword' in chat)) chat.antiBadword = true
+          if (!('stiker' in chat)) chat.stiker = false
           if (!('viewonce' in chat)) chat.viewonce = true
+          if (!('nsfw' in chat)) chat.nsfw = false
         } else global.db.data.chats[m.chat] = {
           isBanned: false,
-          welcome: false,
-          detect: false,
+          welcome: true,
+          detect: true,
           sWelcome: '',
           sBye: '',
           sPromote: '',
           sDemote: '',
-          descUpdate: true,
-          stiker: false,
-          delete: true,
           antiLink: false,
+          autoread: false,
+          broadcast: true,
+          delete: false,
+          desc: true,
+          getmsg: false,
           expired: 0,
-          antiBadword: true,
+          stiker: false,
           viewonce: true,
+          nsfw: false,
+          badword: false,
         }
 
         let settings = global.db.data.settings[this.user.jid]
@@ -114,24 +123,30 @@ module.exports = {
         if (settings) {
           if (!'anon' in settings) settings.anon = true
           if (!'anticall' in settings) settings.anticall = true
+          if (!'statusUpdate' in settings) settings.statusUpdate = true
+          if (!isNumber(settings.status)) settings.status = 0
           if (!'antispam' in settings) settings.antispam = true
-          if (!'antitroli' in settings) settings.antitroli = true
+          if (!'antitroli' in settings) settings.antitroli = false
+          if (!'group' in settings) settings.group = false
+          if (!'jadibot' in settings) settings.jadibot = false
+          if (!'private' in settings) settings.private = false
+          if (!'restrict' in settings) settings.restrict = false
+          if (!'self' in settings) settings.self = false
           if (!'backup' in settings) settings.backup = false
           if (!isNumber(settings.backupDB)) settings.backupDB = 0
-          if (!'groupOnly' in settings) settings.groupOnly = false
-          if (!'jadibot' in settings) settings.groupOnly = false
-          if (!'nsfw' in settings) settings.nsfw = true
-          if (!isNumber(settings.status)) settings.status = 0
         } else global.db.data.settings[this.user.jid] = {
           anon: true,
           anticall: true,
           antispam: true,
-          antitroli: true,
+          antitroli: false,
+          group: false,
+          jadibot: false,
+          private: false,
+          restrict: false,
+          self: false,
           backup: false,
           backupDB: 0,
-          groupOnly: false,
-          jadibot: false,
-          nsfw: true,
+          statusUpdate: true,
           status: 0,
         }
       } catch (e) {
@@ -164,8 +179,7 @@ module.exports = {
 
       let isROwner = [global.conn.user.jid, ...global.owner].map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)
       let isOwner = isROwner || m.fromMe
-      let isMods = isOwner || global.mods.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)
-      let isPrems = isROwner || global.prems.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').includes(m.sender)
+      let isPrems = isROwner || db.data.users[m.sender].premium
       if (!isPrems && !m.isGroup && global.db.data.settings.groupOnly) return
       let groupMetadata = m.isGroup ? this.chats.get(m.chat).metadata || await this.groupMetadata(m.chat) : {} || {}
       let participants = m.isGroup ? groupMetadata.participants : [] || []
@@ -176,9 +190,9 @@ module.exports = {
       let isBlocked = this.blocklist.map(v => v.replace(/[^0-9]/g, '') + '@s.whatsapp.net').filter(v => v != this.user.jid).includes(m.sender) // Apakah user diblokir?
       for (let name in global.plugins) {
         let plugin = global.plugins[name]
-        if (!plugin) continue
+        if (!plugin) continue        
         if (plugin.disabled) continue
-        if (!opts['restrict']) if (plugin.tags && plugin.tags.includes('admin')) continue
+     //   if (!opts['restrict']) if (plugin.tags && plugin.tags.includes('admin')) continue
         const str2Regex = str => str.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&')
         let _prefix = plugin.customPrefix ? plugin.customPrefix : conn.prefix ? conn.prefix : global.prefix
         let match = (_prefix instanceof RegExp ? // RegExp Mode?
@@ -247,10 +261,6 @@ module.exports = {
           }
           if (plugin.owner && !isOwner) { // Owner bot
             fail('owner', m, this)
-            continue
-          }
-          if (plugin.mods && !isMods) { // Moderator
-            fail('mods', m, this)
             continue
           }
           if (plugin.premium && !isPrems) { // Premium
@@ -390,31 +400,33 @@ module.exports = {
           if (chat.welcome) {
             let groupMetadata = await this.groupMetadata(jid)
             for (let user of participants) {
-              // let pp = './src/avatar_contact.png'
-              let pp = 'https://telegra.ph/file/1866f0bf21f0c6cb3c33c.jpg'
+              let pp = await(await fetch('https://telegra.ph/file/65ac4f7c642b11adf85de.jpg')).buffer()
+              let kai = await(await fetch('https://telegra.ph/file/4d2bca79fa5a4f2dd3d81.jpg')).buffer()
               try {
                 pp = await uploadImage(await (await fetch(await this.getProfilePicture(user))).buffer())
               } catch (e) {
               } finally {
-                text = (action === 'add' ? (chat.sWelcome || this.welcome || conn.welcome || 'Selamat datang, @user!').replace('@subject', this.getName(jid)).replace('@desc', groupMetadata.desc) :
-                  (chat.sBye || this.bye || conn.bye || 'Sampai jumpa, @user!')).replace(/@user/g, '@' + user.split`@`[0])
-                let wel = `https://hardianto-chan.herokuapp.com/api/tools/welcomer2?name=${encodeURIComponent(this.getName(user))}&descriminator=${user.split(`@`)[0].substr(-5)}&totalmem=${encodeURIComponent(groupMetadata.participants.length)}&namegb=${encodeURIComponent(this.getName(jid))}&ppuser=${pp}&background=https://i.ibb.co/KhtRxwZ/dark.png&apikey=hardianto`
-                let lea = `https://hardianto-chan.herokuapp.com/api/tools/leave2?name=${encodeURIComponent(this.getName(user))}&descriminator=${user.split(`@`)[0].substr(-5)}&totalmem=${encodeURIComponent(groupMetadata.participants.length)}&namegb= ${encodeURIComponent(this.getName(jid))}&ppuser=${pp}&background=https://i.ibb.co/KhtRxwZ/dark.png&apikey=hardianto`
-  
-                this.sendFile(jid, action === 'add' ? wel : lea, 'pp.jpg', text, null, false, {
-                  thumbnail: await (await fetch(action === 'add' ? wel : lea)).buffer(),
-                  contextInfo: {
-                    mentionedJid: [user]
-                  }
-                })
-              }
+              text = (action === 'add' ? (chat.sWelcome || this.welcome || conn.welcome || 'ようこそ Youkuso, @user!').replace('@subject', this.getName(jid)).replace('@desc', groupMetadata.desc) :
+                  (chat.sBye || this.bye || conn.bye || '左様なら Sayounara, @user!')).replace(/@user/g, '@' + user.split`@`[0])
+                let wel = `Welcome Message`
+                let lea = `Group Participant Leave`
+                this.reply(jid, text, 0, { thumbnail: kai, contextInfo: {
+                mentionedJid: [user],
+                externalAdReply: {
+                  sourceUrl: 'https://chat.whatsapp.com/IyW30zaBryOIDuP1YTC4ZR',
+                  title: action === 'add' ? wel : lea,
+                  body: 'Yoshino Bot',
+                  thumbnail: pp
+                }
+              }}) 
             }
+          }
           }
           break
       case 'promote':
-        text = (chat.sPromote || this.spromote || conn.spromote || '@user sekarang Admin')
+        //text = (chat.sPromote || this.spromote || conn.spromote || '@user sekarang Admin')
       case 'demote':
-        if (!text) text = (chat.sDemote || this.sdemote || conn.sdemote || '@user sekarang bukan Admin')
+        //if (!text) text = (chat.sDemote || this.sdemote || conn.sdemote || '@user sekarang bukan Admin')
         text = text.replace('@user', '@' + participants[0].split`@`[0])
         if (chat.detect) this.sendMessage(jid, text, MessageType.extendedText, {
           contextInfo: {
@@ -430,57 +442,54 @@ module.exports = {
     await this.sendButton(m.key.remoteJid, `
 Terdeteksi @${m.participant.split`@`[0]} telah menghapus pesan
 ketik *.on delete* untuk mematikan pesan ini
-`.trim(), '', 'Matikan Antidelete', ',on delete', m.message, {
-      contextInfo: {
-        mentionedJid: [m.participant]
-      }
-    })
+`.trim(), watermark, 'Matikan Antidelete', '.on delete', m.message)
     this.copyNForward(m.key.remoteJid, m.message).catch(e => console.log(e, m))
   },
   async onCall(json) {
-    let { from } = json[2][0][1]
+    if (!db.data.settings[this.user.jid].anticall) return
+    let jid = json[2][0][1]['from']
+    let isOffer = json[2][0][2][0][0] == 'offer'
     let users = global.db.data.users
-    let user = users[from] || {}
+    let user = users[jid] || {}
     if (user.whitelist) return
-    if (!db.data.settings.anticall) return
-    switch (this.callWhitelistMode) {
-      case 'mycontact':
-        if (from in this.contacts && 'short' in this.contacts[from])
-          return
-        break
-    }
-    user.call += 1
-    await this.reply(from, `Jika kamu menelepon lebih dari 2, kamu akan diblokir.\n\n${user.call} / 2`, null)
-    if (user.call == 5) {
-      await this.blockUser(from, 'add')
-      user.call = 0
+    if (jid && isOffer) {
+      const tag = this.generateMessageTag()
+      const nodePayload = ['action', 'call', ['call', {
+        'from': this.user.jid,
+        'to': `${jid.split`@`[0]}@s.whatsapp.net`,
+        'id': tag
+      }, [['reject', {
+        'call-id': json[2][0][2][0][1]['call-id'],
+        'call-creator': `${jid.split`@`[0]}@s.whatsapp.net`,
+        'count': '0'
+      }, null]]]]
+      this.sendJSON(nodePayload, tag)
+      m.reply(`Kamu dibanned karena menelepon bot, owner : @${owner[0]}`)
     }
   },
   async GroupUpdate({ jid, desc, descId, descTime, descOwner, announce }) {
-    if (!db.data.chats[jid].descUpdate) return
+    if (!db.data.chats[jid].desc) return
     if (!desc) return
     let caption = `
     @${descOwner.split`@`[0]} telah mengubah deskripsi grup.
     ${desc}
-    ketik *.off desc* untuk mematikan pesan ini
         `.trim()
-    this.sendButton(jid, caption, '', 'Matikan Deskripsi', ',off desc', { contextInfo: { mentionedJid: this.parseMention(caption) } })
+    this.sendButton(jid, caption, watermark, 'Matikan', '.off desc')
 
   }
 }
 
 global.dfail = (type, m, conn) => {
   let msg = {
-    rowner: 'Perintah ini hanya dapat digunakan oleh _*Pemilik Bot*_',
-    owner: 'Perintah ini hanya dapat digunakan oleh _*Pemilik Bot*_',
-    mods: 'Perintah ini hanya dapat digunakan oleh _*Moderator*_',
-    premium: 'Perintah ini hanya untuk pengguna _*Premium*_',
-    group: 'Perintah ini hanya dapat digunakan di grup',
-    private: 'Perintah ini hanya dapat digunakan di Chat Pribadi',
-    admin: 'Perintah ini hanya untuk *Admin* grup',
-    botAdmin: 'Jadikan bot sebagai *Admin* untuk menggunakan perintah ini',
+    rowner: 'This command only can used by _*Owner!*_\nPerintah ini hanya dapat digunakan oleh _*Owner!*_.',
+    owner: 'This command only can used by _*Owner!*_\nPerintah ini hanya dapat digunakan oleh _*Owner!_*.',
+    premium: 'This command only can used by _*Premium Users.*_\nPerintah ini hanya dapat digunakan oleh _*User Premium.*_',
+    group: 'This command only can used in Group.\nPerintah ini hanya dapat digunakan di Group.',
+    private: 'This command only can used in Private Chat.\nPerintah ini hanya dapat digunakan di Chat Pribadi.',
+    admin: 'This command only can used by *Group Admin.*\nPerintah ini hanya dapat digunakan oleh *Admin Group.*',
+    botAdmin: 'Make the bot number as a group admin to use this command.\nJadikan bot sebagai admin untuk menggunakan perintah ini.',
     unreg: 'Silahkan daftar untuk menggunakan fitur ini dengan cara mengetik:\n\n*#daftar nama.umur*\n\nContoh: *#daftar Arif.19*',
-    nsfw: 'NSFW tidak aktif'
+    nsfw: 'NSFW doesnt active.\nNSFW tidak aktif.'
   }[type]
   if (msg) return m.reply(msg)
 }
@@ -490,7 +499,7 @@ let chalk = require('chalk')
 let file = require.resolve(__filename)
 fs.watchFile(file, () => {
   fs.unwatchFile(file)
-  console.log(chalk.redBright("Update 'handler.js'"))
+  console.log(chalk.redBright("Memperbarui 'handler.js'"))
   delete require.cache[file]
   if (global.reloadHandler) console.log(global.reloadHandler())
 })

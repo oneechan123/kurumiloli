@@ -1,55 +1,61 @@
-# kurumiloli
-Wa-bot
-<p align="center">
-	<img src="https://telegra.ph/file/b6f640a9808f6314f70a2.jpg" width="35%" style="margin-left: auto;margin-right: auto;display: block;">
+<p align="left">
+	<img src="https://telegra.ph/file/2a994c4949315bb7f51b8.jpg" width="35%" style="margin-left: auto;margin-right: auto;display: block;">
 </p>
-<h1 align="center">kurumiloli Bot</h1>
+<h1 align="left">Haruno Bot</h1>
 
+Note: Untuk sementara repo ini belum mendapatkan update dari versi Haruno terbaru. Silahkan tunggu hingga repo ini menerima beberapa update.
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/Zafkielbot/kurumiloli
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/FadliDarmawan/haruno)
 
-[![Grup WhatsApp](https://img.shields.io/badge/WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://chat.whatsapp.com/HvbN0tnLrorCx0L3dRGG2f)
+[![Run on Repl.it](https://repl.it/badge/github/FadliDarmawan/haruno)](https://repl.it/github/FadliDarmawan/haruno)
 
-## UNTUK PENGGUNA TERMUX/UBUNTU/SSH
+[![Grup WhatsApp](https://img.shields.io/badge/WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white)](https://chat.whatsapp.com/LIX42RUhLi15MBXhfvrF6K)
 
-```bash
-apt update && apt upgrade
-apt install git -y
-apt install nodejs -y
-apt install ffmpeg -y
-apt install imagemagick -y
-git clone https://github.com/Zafkielbot/kurumiloli
-cd kurumiloli
-npm i
-npm start
-node .
+# Haruno Bot
+Haruno bot adalah bot whatsapp hasil pe-nggarapan ulang dari ariffb25/stikerinbot yang sudah di edit agar bisa di jalankan di termux.
+Haruno bot juga dapat di jalankan di RPP/VPS/Windows, Heroku, Replit.
+
+# Termux
+NOTE: Untuk termux silahkan hilangkan fitur fitur yang menggunakan canvas dan wsf, kemungkinan mongoDB juga tidak bisa dipakai.
 ```
+apt install ffmpeg
+apt install imagemagick
+apt install nodejs
+apt install git
+git clone https://github.com/FadliDarmawan/haruno
+cd haruno
+npm i
+node . (option)
+````
 
-## UNTUK PENGGUNA WINDOWS/VPS/RDP
-
+# RDP/VPS/Windows
 * Unduh & Instal Git [`Klik Disini`](https://git-scm.com/downloads)
 * Unduh & Instal NodeJS [`Klik Disini`](https://nodejs.org/en/download)
 * Unduh & Instal FFmpeg [`Klik Disini`](https://ffmpeg.org/download.html) (**Jangan Lupa Tambahkan FFmpeg ke variabel lingkungan PATH**)
 * Unduh & Instal ImageMagick [`Klik Disini`](https://imagemagick.org/script/download.php)
-
-```bash
-git clone https://github.com/Zafkielbot/kurumiloli
-cd kurumiloli
-npm i
-npm update
-npm index
 ```
+git clone https://github.com/FadliDarmawan/haruno
+cd natsukawa
+npm i
+node . (option)
+```
+# Replit
+[![Run on Repl.it](https://repl.it/badge/github/FadliDarmawan/natsukawa)](https://repl.it/github/FadliDarmawan/haruno)
+* Klik button
+* Buka console
+```
+npm i
+node . (option)
+```
+# Heroku
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/FadliDarmawan/haruno)
 
----------
-
-## UNTUK PENGGUNA HEROKU
-
-### Instal Buildpack
+*install buildpack
 * heroku/nodejs
 * https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest.git
 * https://github.com/DuckyTeam/heroku-buildpack-imagemagick.git
 
----------
+# Option
 
 ## Arguments `node . [--options] [<session name>]`
 
@@ -136,7 +142,7 @@ conn.logger.level = 'debug'
 
 ---------
 
- [![Nurutomo](https://github.com/Nurutomo.png?size=100)](https://github.com/Nurutomo) | [![Ariffb](https://github.com/ariffb25.png?size=100)](https://github.com/ariffb25) | [![FadliDarmawan](https://github.com/FadliDarmawan/haruno.png?size=100)](https://github.com/FadliDarmawan/haruno)
-----|----
-[Nurutomo](https://github.com/Nurutomo) | [Ariffb](https://github.com/ariffb25) | [FadliDarmawan](https://github.com/FadliDarmawan/haruno)
- Penulis / Pencipta | Penulis ulang
+ [![Nurutomo](https://github.com/Nurutomo.png?size=100)](https://github.com/Nurutomo) | [![Ariffb](https://github.com/ariffb25.png?size=100)](https://github.com/ariffb25) | [![Fadli](https://github.com/FadliDarmawan.png?size=100)](https://github.com/FadliDarmawan)
+----|----|----
+[Nurutomo](https://github.com/Nurutomo) | [Ariffb](https://github.com/ariffb25) | [Fadli](https://github.com/FadliDarmawan)
+ Penulis / Pencipta | Penulis ulang | Pengembang ulang

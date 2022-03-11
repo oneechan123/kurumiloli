@@ -1,15 +1,15 @@
-console.log('Locxg no')
+console.log('Memulai...')
 let { spawn } = require('child_process')
 let path = require('path')
 let fs = require('fs')
 let package = require('./package.json')
 const CFonts = require('cfonts')
-CFonts.say('Zafkiel-Bot', {
+CFonts.say('Haruno Bot', {
   colors: ['#f2aa4c'],
   font: 'block',
   align: 'center',
 })
-CFonts.say(`'Zafkiel-Bot' Tokisaki Kurumi`, {
+CFonts.say(`'${package.name}' Oleh @${package.author.name || package.author}`, {
   colors: ['#f2aa4c'],
   font: 'console',
   align: 'center',
